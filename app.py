@@ -230,11 +230,12 @@ def add_student():
 
             compressed_filename = filename
 
-         # Random Storage Type
-        storage_type = random.choice([
-            'Local Storage',
-            'Cloud Storage'
-        ])
+        # Smart Storage Logic
+
+        if original_size > 5000000:  # 5MB
+            storage_type = "Cloud Storage"
+        else:
+            storage_type = "Local Storage" 
 
         # Save to database
         cursor = mysql.connection.cursor()
