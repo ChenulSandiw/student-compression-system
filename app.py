@@ -55,6 +55,28 @@ def login():
 
     return render_template('login.html')
 
+@app.route('/create_table')
+def create_table():
+    cursor = mysql.connection.cursor()
+
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS students (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        name VARCHAR(255),
+        email VARCHAR(255),
+        course VARCHAR(255),
+        filename VARCHAR(255),
+        original_size BIGINT,
+        compressed_size BIGINT,
+        storage_type VARCHAR(100)
+    )
+    """)
+
+    mysql.connection.commit()
+    cursor.close()
+
+    return "Students table created successfully!"
+
 
 # =========================================
 # Dashboard
