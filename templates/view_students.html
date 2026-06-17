@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>View Students</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+
+        body{
+            background: #eef2f7;
+            font-family: Arial, sans-serif;
+        }
+
+        .card{
+            border: none;
+            border-radius: 20px;
+        }
+
+        .main-title{
+            font-weight: bold;
+            color: #16213e;
+        }
+
+        .btn-custom{
+            background: linear-gradient(135deg, #16213e, #1a4b84);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 10px 20px;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .btn-custom:hover{
+            background: linear-gradient(135deg, #1a4b84, #2563eb);
+            color: white;
+        }
+
+        .delete-btn{
+            background: #dc3545;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: 0.3s;
+            border: none;
+        }
+
+        .delete-btn:hover{
+            background: #bb2d3b;
+            color: white;
+        }
+
+        img{
+            border-radius: 10px;
+            object-fit: cover;
+        }
+
+        .table{
+            vertical-align: middle;
+        }
+
+        .search-box{
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .badge{
+            font-size: 14px;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <div class="container mt-5">
+
+        <div class="card shadow-sm p-4">
+
+            <!-- Top -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+
+                <h2 class="main-title">
+                    Student Records
+                </h2>
+
+                <a href="/dashboard"
+                   class="btn-custom">
+
+                   ← Back
+
+                </a>
+
+            </div>
+
+            <!-- Search -->
+            <form method="GET" class="mb-4">
+
+                <div class="input-group search-box">
+
+                    <input type="text"
+                           name="search"
+                           class="form-control"
+                           placeholder="Search by name, email, or course">
+
+                    <button class="btn btn-dark">
+
+                        Search
+
+                    </button>
+
+                </div>
+
+            </form>
+
+            <!-- Table -->
+            <div class="table-responsive">
+
+                <table class="table table-hover align-middle">
+
+                    <thead class="table-dark">
+
+                        <tr>
+
+                            <th>ID</th>
+                            <th>File</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Course</th>
+                            <th>Original Size</th>
+                            <th>Compressed Size</th>
+                            <th>Storage</th>
+                            <th>Actions</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        {% for student in students %}
+
+                        <tr>
+
+                            <td>{{ student[0] }}</td>
+
+                            <!-- File Preview -->
+                            <td>
+
+                                {% set extension = student[4].split('.')[-1].lower() %}
+
+                                {% if extension in ['jpg', 'jpeg', 'png'] %}
+
+                                    <img src="{{ url_for('static', filename='uploads/compressed_' + student[4]) }}"
+                                         width="80"
+                                         height="80">
+
+                                {% elif extension == 'pdf' %}
+
+                                    <div class="badge bg-danger p-2">
+
+                                        PDF File
+
+                                    </div>
+
+                                {% elif extension == 'docx' %}
+
+                                    <div class="badge bg-primary p-2">
+
+                                        DOCX File
+
+                                    </div>
+
+                                {% endif %}
+
+                            </td>
+
+                            <!-- Student Info -->
+                            <td>{{ student[1] }}</td>
+
+                            <td>{{ student[2] }}</td>
+
+                            <td>{{ student[3] }}</td>
+
+                            <td>{{ student[5] }} bytes</td>
+
+                            <td>{{ student[6] }} bytes</td>
+                            
+                            <td>
+
+                                {% if student[7] == 'Cloud Storage' %}
+
+                                   <span class="badge bg-info">
+
+                                        ☁ Cloud
+
+                                   </span>
+
+                                 {% else %}
+
+                                   <span class="badge bg-secondary">
+
+                                       💻 Local
+
+                                   </span>
+
+                                 {% endif %}
+
+                            </td>
+
+                            <!-- Actions -->
+                            <td>
+
+                                <div class="d-flex gap-2 flex-wrap">
+
+                                    <!-- Edit -->
+                                    <a href="/edit_student/{{ student[0] }}"
+                                       class="btn btn-primary btn-sm">
+
+                                       Edit
+
+                                    </a>
+
+                                    <!-- Preview -->
+                                    <a href="/preview/{{ student[4] }}"
+                                       class="btn btn-warning btn-sm"
+                                       target="_blank">
+
+                                       Preview
+
+                                    </a>
+
+                                    <!-- Download -->
+                                    <a href="/download/{{ student[4] }}"
+                                       class="btn btn-success btn-sm">
+
+                                       Download
+
+                                    </a>
+
+                                    <!-- Delete -->
+                                    <a href="/delete_student/{{ student[0] }}"
+                                       class="delete-btn">
+
+                                       Delete
+
+                                    </a>
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+</html>
