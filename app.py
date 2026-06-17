@@ -92,6 +92,19 @@ def dashboard():
     # Total Students
     cursor.execute("SELECT COUNT(*) FROM students")
     total_students = cursor.fetchone()[0]
+    
+    # Local Storage Count
+    cursor.execute(
+    "SELECT COUNT(*) FROM students WHERE storage_type='Local Storage'"
+)
+    local_files = cursor.fetchone()[0]
+
+# Cloud Storage Count
+    cursor.execute(
+    "SELECT COUNT(*) FROM students WHERE storage_type='Cloud Storage'"
+)
+    cloud_files = cursor.fetchone()[0]
+
 
     # Total Original Size
     cursor.execute("SELECT SUM(original_size) FROM students")
@@ -145,7 +158,9 @@ def dashboard():
         original_size=original_size,
         compressed_size=compressed_size,
         saved_percentage=saved_percentage,
-        predicted_storage=predicted_storage
+        predicted_storage=predicted_storage,
+        local_files=local_files,
+        cloud_files=cloud_files
     )
 
 
