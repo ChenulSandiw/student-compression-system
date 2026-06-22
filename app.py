@@ -8,6 +8,7 @@ from reportlab.lib.pagesizes import letter
 import os
 import math
 import random
+import boto3
 
 app = Flask(__name__)
 
@@ -27,6 +28,16 @@ app.config['MYSQL_DB'] = os.environ.get('MYSQL_DB')
 app.config['MYSQL_PORT'] = int(os.environ.get('MYSQL_PORT', 3306))
 
 mysql = MySQL(app)
+
+# AWS S3 Configuration
+s3 = boto3.client(
+    's3',
+    aws_access_key_id=os.environ.get('AWS_ACCESS_KEY_ID'),
+    aws_secret_access_key=os.environ.get('AWS_SECRET_ACCESS_KEY'),
+    region_name=os.environ.get('AWS_REGION')
+)
+
+AWS_BUCKET = os.environ.get('AWS_BUCKET_NAME')
 
 # =========================================
 # Home Page
@@ -249,6 +260,12 @@ def add_student():
 
         if original_size > 5000000:  # 5MB
             storage_type = "Cloud Storage"
+
+            s3.upload_file(
+                filepath,
+                AWS_BUCKET,
+                filename
+            )
         else:
             storage_type = "Local Storage" 
 
