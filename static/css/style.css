@@ -13,6 +13,14 @@ body{
 
     min-height:100vh;
 
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    overflow:hidden;
+
 }
 
 
@@ -68,11 +76,11 @@ body{
 
 .btn-primary{
 
-    background:linear-gradient(135deg,#2563EB,#1D4ED8);
+    height:55px;
 
-    border:none;
+    border-radius:12px;
 
-    border-radius:10px;
+    font-size:18px;
 
     font-weight:600;
 
@@ -93,17 +101,19 @@ body{
 
     width:420px;
 
-    background:rgba(255,255,255,.15);
+    background:rgba(255,255,255,0.12);
 
-    backdrop-filter:blur(18px);
+    backdrop-filter:blur(20px);
 
-    border-radius:20px;
+    -webkit-backdrop-filter:blur(20px);
+
+    border:1px solid rgba(255,255,255,0.2);
+
+    border-radius:25px;
 
     padding:40px;
 
-    color:white;
-
-    box-shadow:0 20px 40px rgba(0,0,0,.30);
+    box-shadow:0 20px 60px rgba(0,0,0,.35);
 
 }
 
@@ -128,7 +138,15 @@ body{
 
 .form-control{
 
-    border-radius:10px;
+    height:50px;
+
+    border-radius:12px;
+
+}
+
+.input-group-text{
+
+    border-radius:12px 0 0 12px;
 
 }
 
