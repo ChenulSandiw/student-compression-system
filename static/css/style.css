@@ -122,6 +122,11 @@ body{
     font-size:32px;
 
     font-weight:bold;
+    
+    text-align:center;
+
+    /* Position */
+    margin-top:20px;
 
 }
 
@@ -149,13 +154,6 @@ body{
     border-radius:12px 0 0 12px;
 
 }
-
-.input-group-text{
-
-    border-radius:10px 0 0 10px;
-
-}
-
 
 /* ===============================
    Tables
