@@ -174,6 +174,49 @@ def dashboard():
         cloud_files=cloud_files
     )
 
+# =========================================
+# analytics
+# =========================================
+
+@app.route('/analytics')
+def analytics():
+
+    if 'logged_in' not in session:
+        return redirect('/login')
+
+    cursor = mysql.connection.cursor()
+
+    # Total Students
+    cursor.execute("SELECT COUNT(*) FROM students")
+    total_students = cursor.fetchone()[0]
+
+    # Original Size
+    cursor.execute("SELECT SUM(original_size) FROM students")
+    original_size = cursor.fetchone()[0] or 0
+
+    # Compressed Size
+    cursor.execute("SELECT SUM(compressed_size) FROM students")
+    compressed_size = cursor.fetchone()[0] or 0
+
+    # Saved Percentage
+    if original_size > 0:
+        saved_percentage = round(
+            ((original_size - compressed_size) / original_size) * 100,
+            2
+        )
+    else:
+        saved_percentage = 0
+
+    cursor.close()
+
+    return render_template(
+        "analytics.html",
+        original_size=original_size,
+        compressed_size=compressed_size,
+        saved_percentage=saved_percentage,
+        total_students=total_students
+    )
+
 
 # =========================================
 # Add Student
