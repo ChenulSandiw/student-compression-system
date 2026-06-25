@@ -1,0 +1,158 @@
+
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+body{
+
+    background:linear-gradient(135deg,#0F172A,#2563EB);
+
+    min-height:100vh;
+
+}
+
+
+/* ===============================
+   Navbar
+================================ */
+
+.navbar{
+
+    background:#111827 !important;
+
+    box-shadow:0 5px 20px rgba(0,0,0,.25);
+
+}
+
+.navbar-brand{
+
+    color:white !important;
+
+    font-weight:bold;
+
+    font-size:22px;
+
+}
+
+
+/* ===============================
+   Cards
+================================ */
+
+.card{
+
+    border:none;
+
+    border-radius:20px;
+
+    transition:.4s;
+
+}
+
+.card:hover{
+
+    transform:translateY(-8px);
+
+    box-shadow:0 20px 35px rgba(0,0,0,.20);
+
+}
+
+
+/* ===============================
+   Buttons
+================================ */
+
+.btn-primary{
+
+    background:linear-gradient(135deg,#2563EB,#1D4ED8);
+
+    border:none;
+
+    border-radius:10px;
+
+    font-weight:600;
+
+}
+
+.btn-primary:hover{
+
+    background:linear-gradient(135deg,#1D4ED8,#2563EB);
+
+}
+
+
+/* ===============================
+   Login Card
+================================ */
+
+.login-container{
+
+    width:420px;
+
+    background:rgba(255,255,255,.15);
+
+    backdrop-filter:blur(18px);
+
+    border-radius:20px;
+
+    padding:40px;
+
+    color:white;
+
+    box-shadow:0 20px 40px rgba(0,0,0,.30);
+
+}
+
+.login-title{
+
+    font-size:32px;
+
+    font-weight:bold;
+
+}
+
+.login-subtitle{
+
+    color:#E5E7EB;
+
+}
+
+
+/* ===============================
+   Inputs
+================================ */
+
+.form-control{
+
+    border-radius:10px;
+
+}
+
+.input-group-text{
+
+    border-radius:10px 0 0 10px;
+
+}
+
+
+/* ===============================
+   Tables
+================================ */
+
+.table{
+
+    border-radius:15px;
+
+    overflow:hidden;
+
+}
+
+.table-dark{
+
+    background:#111827;
+
+}

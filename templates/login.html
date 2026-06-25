@@ -17,94 +17,33 @@
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-<style>
-
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:'Poppins',sans-serif;
-}
-
-body{
-
-    background:linear-gradient(135deg,#5B21B6,#2563EB);
-
-    min-height:100vh;
-
-    display:flex;
-
-    justify-content:center;
-
-    align-items:center;
-
-    overflow:hidden;
-
-}
-
-.login-container{
-
-    width:420px;
-
-    background:rgba(255,255,255,0.15);
-
-    backdrop-filter:blur(18px);
-
-    border-radius:20px;
-
-    padding:40px;
-
-    box-shadow:0 20px 40px rgba(0,0,0,0.25);
-
-    color:white;
-
-}
-
-.login-title{
-
-    text-align:center;
-
-    font-size:32px;
-
-    font-weight:bold;
-
-    margin-bottom:10px;
-
-}
-
-.login-subtitle{
-
-    text-align:center;
-
-    opacity:.8;
-
-    margin-bottom:30px;
-
-}
-
-</style>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 
 </head>
 
 <body>
 
-<div class="login-container animate__animated animate__zoomIn">
+<div class="text-center mb-4">
 
-    <div class="text-center mb-4">
+    <div class="mb-3">
 
-        <i class="fas fa-cloud-upload-alt"
-           style="font-size:60px;color:white;"></i>
-
-        <h2 class="login-title">
-            Welcome Back
-        </h2>
-
-        <p class="login-subtitle">
-            Smart Student Compression System
-        </p>
+        <i class="fas fa-cloud-upload-alt fa-4x text-info animate__animated animate__bounceIn"></i>
 
     </div>
 
+    <h2 class="login-title">
+
+        Smart Student Compression System
+
+    </h2>
+
+    <p class="login-subtitle">
+
+        Secure Login Portal
+
+    </p>
+
+</div>
     <form method="POST">
 
         <div class="mb-3">
@@ -155,7 +94,7 @@ body{
 
         <button
             type="submit"
-            class="btn btn-primary w-100 btn-lg">
+            class="btn btn-primary w-100 btn-lg mt-3">
 
             <i class="fas fa-sign-in-alt"></i>
 
