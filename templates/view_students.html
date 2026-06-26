@@ -3,273 +3,135 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <title>View Students</title>
-
-    <!-- Bootstrap -->
+    <title>Students</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <style>
-
-        body{
-            background: #eef2f7;
-            font-family: Arial, sans-serif;
-        }
-
-        .card{
-            border: none;
-            border-radius: 20px;
-        }
-
-        .main-title{
-            font-weight: bold;
-            color: #16213e;
-        }
-
-        .btn-custom{
-            background: linear-gradient(135deg, #16213e, #1a4b84);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            padding: 10px 20px;
-            text-decoration: none;
-            transition: 0.3s;
-        }
-
-        .btn-custom:hover{
-            background: linear-gradient(135deg, #1a4b84, #2563eb);
-            color: white;
-        }
-
-        .delete-btn{
-            background: #dc3545;
-            color: white;
-            padding: 5px 12px;
-            border-radius: 8px;
-            text-decoration: none;
-            transition: 0.3s;
-            border: none;
-        }
-
-        .delete-btn:hover{
-            background: #bb2d3b;
-            color: white;
-        }
-
-        img{
-            border-radius: 10px;
-            object-fit: cover;
-        }
-
-        .table{
-            vertical-align: middle;
-        }
-
-        .search-box{
-            border-radius: 12px;
-            overflow: hidden;
-        }
-
-        .badge{
-            font-size: 14px;
-        }
-
-    </style>
-
+    <link rel="stylesheet" href="/static/css/style.css">
 </head>
-
 <body>
 
-    <div class="container mt-5">
+    <aside class="sidebar">
+        <div class="sidebar-logo">
+            <div class="logo-icon">☁</div>
+            <h2>Smart Student</h2>
+            <span>Compression System</span>
+        </div>
+        <nav class="sidebar-nav">
+            <div class="nav-label">Main</div>
+            <a href="/dashboard"><span class="nav-icon">🏠</span> Dashboard</a>
+            <a href="/add_student"><span class="nav-icon">➕</span> Add Student</a>
+            <a href="/view_students" class="active"><span class="nav-icon">👨‍🎓</span> Students</a>
+            <div class="nav-label">Tools</div>
+            <a href="/analytics"><span class="nav-icon">📊</span> Analytics</a>
+            <a href="/export_pdf"><span class="nav-icon">📄</span> Reports</a>
+        </nav>
+        <div class="sidebar-footer">
+            <a href="/"><span class="nav-icon">🚪</span> Logout</a>
+        </div>
+    </aside>
 
-        <div class="card shadow-sm p-4">
+    <main class="main">
 
-            <!-- Top -->
-            <div class="d-flex justify-content-between align-items-center mb-4">
+        <div class="topbar anim-fade-in">
+            <div class="topbar-left">
+                <h1>Students</h1>
+                <p>All registered student records</p>
+            </div>
+            <div class="topbar-right">
+                <div class="badge-time" id="liveClock">—</div>
+                <button class="dark-toggle" onclick="toggleDark()">
+                    <span id="darkIcon">🌙</span> Dark Mode
+                </button>
+            </div>
+        </div>
 
-                <h2 class="main-title">
-                    Student Records
-                </h2>
+        <div class="card-glass table-card anim-slide-up">
 
-                <a href="/dashboard"
-                   class="btn-custom">
-
-                   ← Back
-
-                </a>
-
+            <div class="table-header">
+                <h4>👨‍🎓 Student Records</h4>
+                <form method="GET" action="/view_students" style="display:flex;gap:8px;align-items:center;">
+                    <div class="search-box">
+                        <span>🔍</span>
+                        <input type="text" name="search"
+                               placeholder="Search name, email, course..."
+                               value="{{ request.args.get('search', '') }}">
+                    </div>
+                    <button type="submit" class="btn-primary-custom" style="padding:10px 18px;">Search</button>
+                </form>
+                <a href="/add_student" class="btn-primary-custom">➕ Add New</a>
             </div>
 
-            <!-- Search -->
-            <form method="GET" class="mb-4">
-
-                <div class="input-group search-box">
-
-                    <input type="text"
-                           name="search"
-                           class="form-control"
-                           placeholder="Search by name, email, or course">
-
-                    <button class="btn btn-dark">
-
-                        Search
-
-                    </button>
-
-                </div>
-
-            </form>
-
-            <!-- Table -->
-            <div class="table-responsive">
-
-                <table class="table table-hover align-middle">
-
-                    <thead class="table-dark">
-
+            <div style="overflow-x:auto;">
+                <table class="data-table">
+                    <thead>
                         <tr>
-
-                            <th>ID</th>
-                            <th>File</th>
+                            <th>#</th>
                             <th>Name</th>
                             <th>Email</th>
                             <th>Course</th>
-                            <th>Original Size</th>
-                            <th>Compressed Size</th>
+                            <th>Original</th>
+                            <th>Compressed</th>
                             <th>Storage</th>
+                            <th>File</th>
                             <th>Actions</th>
-
                         </tr>
-
                     </thead>
-
                     <tbody>
-
                         {% for student in students %}
-
                         <tr>
-
-                            <td>{{ student[0] }}</td>
-
-                            <!-- File Preview -->
-                            <td>
-
-                                {% set extension = student[4].split('.')[-1].lower() %}
-
-                                {% if extension in ['jpg', 'jpeg', 'png'] %}
-
-                                    <img src="{{ url_for('static', filename='uploads/compressed_' + student[4]) }}"
-                                         width="80"
-                                         height="80">
-
-                                {% elif extension == 'pdf' %}
-
-                                    <div class="badge bg-danger p-2">
-
-                                        PDF File
-
-                                    </div>
-
-                                {% elif extension == 'docx' %}
-
-                                    <div class="badge bg-primary p-2">
-
-                                        DOCX File
-
-                                    </div>
-
-                                {% endif %}
-
-                            </td>
-
-                            <!-- Student Info -->
-                            <td>{{ student[1] }}</td>
-
-                            <td>{{ student[2] }}</td>
-
+                            <td style="color:var(--muted);font-weight:600;">{{ student[0] }}</td>
+                            <td style="font-weight:600;">{{ student[1] }}</td>
+                            <td style="color:var(--muted);">{{ student[2] }}</td>
                             <td>{{ student[3] }}</td>
-
-                            <td>{{ student[5] }} bytes</td>
-
-                            <td>{{ student[6] }} bytes</td>
-                            
+                            <td style="color:var(--muted);">{{ student[5] }} B</td>
+                            <td style="color:#10B981;font-weight:600;">{{ student[6] }} B</td>
                             <td>
-
                                 {% if student[7] == 'Cloud Storage' %}
-
-                                   <span class="badge bg-info">
-
-                                        ☁ Cloud
-
-                                   </span>
-
-                                 {% else %}
-
-                                   <span class="badge bg-secondary">
-
-                                       💻 Local
-
-                                   </span>
-
-                                 {% endif %}
-
+                                    <span class="badge-cloud">☁️ Cloud</span>
+                                {% else %}
+                                    <span class="badge-local">💻 Local</span>
+                                {% endif %}
                             </td>
-
-                            <!-- Actions -->
                             <td>
-
-                                <div class="d-flex gap-2 flex-wrap">
-
-                                    <!-- Edit -->
-                                    <a href="/edit_student/{{ student[0] }}"
-                                       class="btn btn-primary btn-sm">
-
-                                       Edit
-
-                                    </a>
-
-                                    <!-- Preview -->
-                                    <a href="/preview/{{ student[4] }}"
-                                       class="btn btn-warning btn-sm"
-                                       target="_blank">
-
-                                       Preview
-
-                                    </a>
-
-                                    <!-- Download -->
-                                    <a href="/download/{{ student[4] }}"
-                                       class="btn btn-success btn-sm">
-
-                                       Download
-
-                                    </a>
-
-                                    <!-- Delete -->
-                                    <a href="/delete_student/{{ student[0] }}"
-                                       class="delete-btn">
-
-                                       Delete
-
-                                    </a>
-
-                                </div>
-
+                                <a href="/preview/{{ student[4] }}"
+                                   target="_blank"
+                                   class="btn-edit-custom"
+                                   style="font-size:12px;padding:6px 12px;">
+                                    👁 View
+                                </a>
                             </td>
-
+                            <td>
+                                <div style="display:flex;gap:6px;">
+                                    <a href="/edit_student/{{ student[0] }}"
+                                       class="btn-edit-custom">✏️ Edit</a>
+                                    <a href="/delete_student/{{ student[0] }}"
+                                       class="btn-danger-custom"
+                                       onclick="return confirm('Delete this student?')">🗑</a>
+                                </div>
+                            </td>
                         </tr>
-
+                        {% else %}
+                        <tr>
+                            <td colspan="9" style="text-align:center;padding:40px;color:var(--muted);">
+                                No students found. <a href="/add_student" style="color:var(--blue);">Add one →</a>
+                            </td>
+                        </tr>
                         {% endfor %}
-
                     </tbody>
-
                 </table>
-
             </div>
 
         </div>
 
-    </div>
+    </main>
 
+    <script>
+        function updateClock() {
+            document.getElementById('liveClock').textContent =
+                new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        }
+        updateClock(); setInterval(updateClock, 1000);
+        function toggleDark() { document.body.classList.toggle('dark'); }
+    </script>
 </body>
 </html>
