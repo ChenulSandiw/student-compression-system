@@ -146,19 +146,14 @@ def dashboard():
 
         saved_percentage = 0
 
-    # AI Prediction
+    # AI Prediction — per-student average compressed size in KB
     future_students = 1000
 
     if total_students > 0:
-
-        average_storage = compressed_size / total_students
-
-        predicted_storage = math.ceil(
-            (average_storage * future_students) / 1024
-        )
-
+        average_compressed_per_student = compressed_size / total_students
+        predicted_storage_bytes = average_compressed_per_student * future_students
+        predicted_storage = round(predicted_storage_bytes / 1024, 2)  # in KB
     else:
-
         predicted_storage = 0
 
     cursor.close()
@@ -326,8 +321,8 @@ def add_student():
             email,
             course,
             filename,
-            str(original_size),
-            str(compressed_size),
+            int(original_size),
+            int(compressed_size),
             storage_type
         ))
 
@@ -601,6 +596,59 @@ def download_file(filename):
         filename,
         as_attachment=True
     )
+
+
+
+# =========================================
+# Fix existing string sizes in DB
+# Run once: /fix_sizes
+# =========================================
+@app.route('/fix_sizes')
+def fix_sizes():
+
+    if 'logged_in' not in session:
+        return redirect('/login')
+
+    cursor = mysql.connection.cursor()
+    cursor.execute("SELECT id, original_size, compressed_size FROM students")
+    rows = cursor.fetchall()
+
+    fixed = 0
+    for row in rows:
+        sid        = row[0]
+        orig_raw   = row[1]
+        comp_raw   = row[2]
+
+        try:
+            orig = int(str(orig_raw).strip())
+            comp = int(str(comp_raw).strip())
+        except:
+            continue
+
+        cursor.execute(
+            "UPDATE students SET original_size=%s, compressed_size=%s WHERE id=%s",
+            (orig, comp, sid)
+        )
+        fixed += 1
+
+    mysql.connection.commit()
+    cursor.close()
+
+    return f"""
+    <div style="font-family:sans-serif;padding:40px;max-width:500px;margin:auto;">
+        <h2 style="color:#10B981;">✅ Fixed {fixed} records!</h2>
+        <p style="color:#64748B;margin-top:10px;">
+            All original_size and compressed_size values have been
+            converted to proper integers in the database.
+        </p>
+        <a href="/dashboard"
+           style="display:inline-block;margin-top:20px;
+                  background:#2563EB;color:#fff;padding:12px 24px;
+                  border-radius:10px;text-decoration:none;font-weight:700;">
+            → Go to Dashboard
+        </a>
+    </div>
+    """
 
 
 # =========================================
