@@ -775,15 +775,19 @@
         </div>
 
         <!-- AI Prediction -->
-        <div class="card-glass ai-card anim-slide-up delay-5">
-            <h4>🤖 AI Storage Prediction</h4>
+        <div class="card-glass ai-card anim-slide-up delay-4">
+            <h4>🤖 Storage Summary</h4>
             <p class="ai-label">
-                Based on current compression performance, if the system stores
-                <strong>1,000 students</strong>, the estimated compressed storage will be:
+                Total space saved after compressing uploaded files.
             </p>
             <div class="ai-prediction-value">
-                {{ predicted_storage }}<span> KB</span>
+                {{ saved }}<span> Bytes</span>
             </div>
+            <hr>
+            <p><strong>Compression Ratio:</strong> {{ saved_percentage }}%</p>
+
+            <p><strong>Storage Efficiency:</strong> {{ storage_efficiency }}</p>
+
         </div>
 
         <!-- Analytics Banner -->

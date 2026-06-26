@@ -133,6 +133,15 @@ def dashboard():
 
     # Storage Saved
     saved = original_size - compressed_size
+    # Storage Efficiency
+    if saved_percentage >= 80:
+        storage_efficiency = "Excellent"
+    elif saved_percentage >= 60:
+        storage_efficiency = "Good"
+    elif saved_percentage >= 40:
+        storage_efficiency = "Average"
+    else:
+        storage_efficiency = "Needs Improvement"
 
     # Saved Percentage
     if original_size > 0:
@@ -171,7 +180,9 @@ def dashboard():
         saved_percentage=saved_percentage,
         predicted_storage=predicted_storage,
         local_files=local_files,
-        cloud_files=cloud_files
+        cloud_files=cloud_files,
+        saved=saved,
+        storage_efficiency=storage_efficiency,
     )
 
 # =========================================
